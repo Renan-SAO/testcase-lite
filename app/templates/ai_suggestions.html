@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}Assistente de sugestões | TestCase Lite{% endblock %}
+{% block content %}
+<div class="mb-4"><h1 class="h2">Assistente de sugestões</h1><p class="text-muted">Insira um requisito para receber ideias iniciais de cenários. Revise e adapte cada sugestão antes de usá-la.</p></div>
+<div class="alert alert-info">Esta versão usa regras locais demonstrativas, não um modelo generativo conectado. Isso permite testar o fluxo sem chave de API. A integração com um modelo de IA real é uma evolução opcional.</div>
+<form method="post" class="card card-body mb-4"><label for="requirement" class="form-label">Requisito</label><textarea class="form-control mb-3" id="requirement" name="requirement" rows="4" required>{{ requirement }}</textarea><button class="btn btn-primary align-self-start">Gerar sugestões</button></form>
+{% if suggestions %}<h2 class="h4 mb-3">Sugestões geradas</h2><div class="row g-3">{% for item in suggestions %}<div class="col-lg-4"><div class="card h-100"><div class="card-body"><h3 class="h5">{{ item.title }}</h3><h4 class="h6">Passos sugeridos</h4><p class="pre-wrap">{{ item.steps }}</p><h4 class="h6">Resultado esperado</h4><p>{{ item.expected }}</p></div></div></div>{% endfor %}</div>{% endif %}
+{% endblock %}

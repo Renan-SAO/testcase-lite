@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Painel | TestCase Lite{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+  <div><h1 class="h2 mb-1">Painel de qualidade</h1><p class="text-muted mb-0">Acompanhe casos de teste e resultados registrados.</p></div>
+  <a class="btn btn-primary" href="{{ url_for('main.new_case') }}">+ Novo caso de teste</a>
+</div>
+<div class="row g-3 mb-4">
+  {% for label, value in [('Casos cadastrados', metrics.cases), ('Execuções', metrics.executions), ('Aprovados', metrics.approved), ('Reprovados', metrics.failed), ('Bloqueados', metrics.blocked)] %}
+  <div class="col-6 col-lg">
+    <div class="card metric-card h-100"><div class="card-body"><div class="text-muted small">{{ label }}</div><div class="display-6 fw-semibold">{{ value }}</div></div></div>
+  </div>
+  {% endfor %}
+</div>
+<div class="card">
+  <div class="card-header bg-white d-flex justify-content-between align-items-center"><strong>Casos de teste</strong><span class="text-muted small">{{ cases|length }} registro(s)</span></div>
+  {% if cases %}
+  <div class="table-responsive"><table class="table table-hover align-middle mb-0">
+    <thead><tr><th>ID</th><th>Título</th><th>Último resultado</th><th class="text-end">Ações</th></tr></thead>
+    <tbody>{% for case in cases %}
+    <tr><td>#{{ loop.index }}</td><td><a class="fw-semibold text-decoration-none" href="{{ url_for('main.case_detail', case_id=case.id) }}">{{ case.title }}</a><div class="small text-muted">{{ case.description or 'Sem descrição' }}</div></td>
+      <td>{% if case.executions %}<span class="badge status-{{ case.executions[0].result|lower }}">{{ case.executions[0].result }}</span>{% else %}<span class="badge text-bg-secondary">Não executado</span>{% endif %}</td>
+      <td class="text-end text-nowrap"><a class="btn btn-sm btn-outline-primary" href="{{ url_for('main.case_detail', case_id=case.id) }}">Abrir</a> <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('main.edit_case', case_id=case.id) }}">Editar</a>
+      <form method="post" class="d-inline" action="{{ url_for('main.delete_case', case_id=case.id) }}" onsubmit="return confirm('Tem certeza que deseja excluir este caso e todo o histórico de execuções e evidências? Esta ação não pode ser desfeita.');">
+        <button class="btn btn-sm btn-outline-danger" type="submit">Excluir</button>
+      </form></td></tr>
+    {% endfor %}</tbody>
+  </table></div>
+  {% else %}
+  <div class="p-5 text-center"><h2 class="h5">Nenhum caso cadastrado</h2><p class="text-muted">Cadastre um caso para começar a registrar execuções.</p><a class="btn btn-primary" href="{{ url_for('main.new_case') }}">Cadastrar primeiro caso</a></div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Editar' if case else 'Novo' }} caso | TestCase Lite{% endblock %}
+{% block content %}
+<div class="mb-4"><a href="{{ url_for('main.index') }}" class="text-decoration-none">← Voltar ao painel</a><h1 class="h2 mt-2">{{ 'Editar caso de teste' if case else 'Novo caso de teste' }}</h1></div>
+<form method="post" class="card card-body">
+  {% for field, label, required, rows in [
+    ('title','Título',true,1), ('description','Descrição',false,2),
+    ('preconditions','Pré-condições',false,2), ('steps','Passos de execução',true,4),
+    ('expected_result','Resultado esperado',true,3)
+  ] %}
+  <div class="mb-3"><label class="form-label" for="{{ field }}">{{ label }}{% if required %} *{% endif %}</label>
+    {% if rows == 1 %}<input class="form-control" id="{{ field }}" name="{{ field }}" maxlength="160" value="{{ form.get(field, '') }}" {% if required %}required{% endif %}>
+    {% else %}<textarea class="form-control" id="{{ field }}" name="{{ field }}" rows="{{ rows }}" {% if required %}required{% endif %}>{{ form.get(field, '') }}</textarea>{% endif %}
+  </div>
+  {% endfor %}
+  <div class="d-flex gap-2"><button class="btn btn-primary" type="submit">Salvar caso</button><a class="btn btn-outline-secondary" href="{{ url_for('main.index') }}">Cancelar</a></div>
+</form>
+{% endblock %}

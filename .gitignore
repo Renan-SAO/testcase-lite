@@ -1,0 +1,15 @@
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+instance/
+.env
+.DS_Store
+
+# Dados locais e banco de desenvolvimento
+*.db
+*.sqlite
+*.sqlite3
